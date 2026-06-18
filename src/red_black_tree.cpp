@@ -1,6 +1,6 @@
 #include "red_black_tree.hpp"
 
-void RedBlackTree::_insert(std::string key, std::string value, bool tombstone = false)
+void RedBlackTree::_insert(std::string key, std::string value, bool tombstone)
 {
     if (root == NIL::instance())
     {
@@ -66,7 +66,7 @@ Node *RedBlackTree::rotate_helper(Node *node)
 
 void RedBlackTree::rotate_left(Node *node)
 {
-    if (node == NIL::instance())
+    if (node == NIL::instance() || node == root)
     {
         return;
     }
@@ -78,12 +78,13 @@ void RedBlackTree::rotate_left(Node *node)
     father->parent = node;
 
     father->right = left;
-    left->parent = father;
+    if (left != NIL::instance())
+        left->parent = father;
 }
 
 void RedBlackTree::rotate_right(Node *node)
 {
-    if (node == NIL::instance())
+    if (node == NIL::instance() || node == root)
     {
         return;
     }
@@ -95,7 +96,8 @@ void RedBlackTree::rotate_right(Node *node)
     father->parent = node;
 
     father->left = right;
-    right->parent = father;
+    if (right != NIL::instance())
+        right->parent = father;
 }
 
 void RedBlackTree::rebalance(Node *node)
