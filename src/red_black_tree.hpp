@@ -1,9 +1,10 @@
 #pragma once
 
+#include "common.hpp"
+
 #include <string>
 
 static std::string NIL_KEY = "<---NIL--->";
-static std::string NIL_VALUE = "<---NIL--->";
 
 enum Colors
 {
@@ -29,7 +30,7 @@ public:
     {
         static TreeNode *nil = []
         {
-            TreeNode *n = new TreeNode{NIL_KEY, NIL_VALUE, false, Colors::BLACK, nullptr, nullptr, nullptr};
+            TreeNode *n = new TreeNode{NIL_KEY, NOT_FOUND_VALUE, false, Colors::BLACK, nullptr, nullptr, nullptr};
             n->left = n->right = n->parent = n;
             return n;
         }();

@@ -11,12 +11,12 @@
 
 namespace
 {
-std::string pad(int i)
-{
-    std::ostringstream oss;
-    oss << std::setw(4) << std::setfill('0') << i;
-    return oss.str();
-}
+    std::string pad(int i)
+    {
+        std::ostringstream oss;
+        oss << std::setw(4) << std::setfill('0') << i;
+        return oss.str();
+    }
 }
 
 TEST(RedBlackTree, InsertSingleKey)
@@ -37,7 +37,7 @@ TEST(RedBlackTree, OverwriteExisting)
 TEST(RedBlackTree, GetMissingFromEmptyTree)
 {
     RedBlackTree t;
-    EXPECT_EQ(t.get("nope"), NIL_VALUE);
+    EXPECT_EQ(t.get("nope"), NOT_FOUND_VALUE);
 }
 
 TEST(RedBlackTree, GetMissingFromNonEmptyTree)
@@ -46,7 +46,7 @@ TEST(RedBlackTree, GetMissingFromNonEmptyTree)
     t.insert("a", "1");
     t.insert("b", "2");
     t.insert("c", "3");
-    EXPECT_EQ(t.get("z"), NIL_VALUE);
+    EXPECT_EQ(t.get("z"), NOT_FOUND_VALUE);
 }
 
 TEST(RedBlackTree, RemoveExistingReturnsNil)
@@ -54,7 +54,7 @@ TEST(RedBlackTree, RemoveExistingReturnsNil)
     RedBlackTree t;
     t.insert("k", "v");
     t.remove("k");
-    EXPECT_EQ(t.get("k"), NIL_VALUE);
+    EXPECT_EQ(t.get("k"), NOT_FOUND_VALUE);
 }
 
 TEST(RedBlackTree, ReinsertAfterRemoveReturnsNewValue)
@@ -70,7 +70,7 @@ TEST(RedBlackTree, RemoveNonExistentTombstoneStillNil)
 {
     RedBlackTree t;
     t.remove("ghost");
-    EXPECT_EQ(t.get("ghost"), NIL_VALUE);
+    EXPECT_EQ(t.get("ghost"), NOT_FOUND_VALUE);
 }
 
 TEST(RedBlackTree, MultipleKeysAllRetrievable)
@@ -119,7 +119,8 @@ TEST(RedBlackTree, LargeInsertRandom)
     RedBlackTree t;
     const int N = 500;
     std::vector<int> keys(N);
-    for (int i = 0; i < N; ++i) keys[i] = i;
+    for (int i = 0; i < N; ++i)
+        keys[i] = i;
     std::mt19937 rng(42);
     std::shuffle(keys.begin(), keys.end(), rng);
 
@@ -145,8 +146,8 @@ TEST(RedBlackTree, MixedInsertRemoveOverwriteWorkload)
     t.remove("e");
 
     EXPECT_EQ(t.get("a"), "1new");
-    EXPECT_EQ(t.get("b"), NIL_VALUE);
+    EXPECT_EQ(t.get("b"), NOT_FOUND_VALUE);
     EXPECT_EQ(t.get("c"), "3");
     EXPECT_EQ(t.get("d"), "4");
-    EXPECT_EQ(t.get("e"), NIL_VALUE);
+    EXPECT_EQ(t.get("e"), NOT_FOUND_VALUE);
 }

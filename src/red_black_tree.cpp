@@ -143,7 +143,7 @@ void RedBlackTree::insert(std::string key, std::string value)
 
 void RedBlackTree::remove(std::string key)
 {
-    _insert(key, NIL_VALUE, true);
+    _insert(key, NOT_FOUND_VALUE, true);
 }
 
 std::string RedBlackTree::get(std::string key)
@@ -157,7 +157,7 @@ std::string RedBlackTree::get(std::string key)
 
     if (current->tombstone)
     {
-        return NIL_VALUE;
+        return NOT_FOUND_VALUE;
     }
 
     return current->value;

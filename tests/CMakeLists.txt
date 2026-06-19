@@ -11,10 +11,12 @@ FetchContent_MakeAvailable(googletest)
 
 add_executable(run_tests
     test_red_black_tree.cpp
+    test_skip_list.cpp
 )
 
 target_link_libraries(run_tests PRIVATE
     rbtree
+    skiplist
     GTest::gtest
     GTest::gtest_main
 )
