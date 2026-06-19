@@ -4,7 +4,7 @@ void RedBlackTree::_insert(std::string key, std::string value, bool tombstone)
 {
     if (root == NIL::instance())
     {
-        root = create_new_node(key, value);
+        root = create_new_node(key, value, tombstone);
         root->color = Colors::BLACK;
         return;
     }
@@ -30,7 +30,7 @@ void RedBlackTree::_insert(std::string key, std::string value, bool tombstone)
             return;
         }
     }
-    Node *new_node = create_new_node(key, value);
+    Node *new_node = create_new_node(key, value, tombstone);
     new_node->parent = prev;
     if (prev->key > key)
     {
@@ -143,7 +143,7 @@ void RedBlackTree::insert(std::string key, std::string value)
 
 void RedBlackTree::remove(std::string key)
 {
-    _insert(key, "", true);
+    _insert(key, NIL_VALUE, true);
 }
 
 std::string RedBlackTree::get(std::string key)
@@ -153,6 +153,11 @@ std::string RedBlackTree::get(std::string key)
     while (current != NIL::instance() && current->key != key)
     {
         current = current->key > key ? current->left : current->right;
+    }
+
+    if (current->tombstone)
+    {
+        return NIL_VALUE;
     }
 
     return current->value;
