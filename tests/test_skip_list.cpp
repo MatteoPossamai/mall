@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-#include "red_black_tree.hpp"
+#include "skip_list.hpp"
 
 namespace
 {
@@ -19,63 +19,63 @@ namespace
     }
 }
 
-TEST(RedBlackTree, InsertSingleKey)
+TEST(SkipList, InsertSingleKey)
 {
-    RedBlackTree t;
+    SkipList t;
     t.insert("k", "v");
     EXPECT_EQ(t.get("k"), "v");
 }
 
-TEST(RedBlackTree, OverwriteExisting)
+TEST(SkipList, OverwriteExisting)
 {
-    RedBlackTree t;
+    SkipList t;
     t.insert("k", "v1");
     t.insert("k", "v2");
     EXPECT_EQ(t.get("k"), "v2");
 }
 
-TEST(RedBlackTree, GetMissingFromEmptyTree)
+TEST(SkipList, GetMissingFromEmptyList)
 {
-    RedBlackTree t;
+    SkipList t;
     EXPECT_EQ(t.get("nope"), NOT_FOUND_VALUE);
 }
 
-TEST(RedBlackTree, GetMissingFromNonEmptyTree)
+TEST(SkipList, GetMissingFromNonEmptyList)
 {
-    RedBlackTree t;
+    SkipList t;
     t.insert("a", "1");
     t.insert("b", "2");
     t.insert("c", "3");
     EXPECT_EQ(t.get("z"), NOT_FOUND_VALUE);
 }
 
-TEST(RedBlackTree, RemoveExistingReturnsNil)
+TEST(SkipList, RemoveExistingReturnsNil)
 {
-    RedBlackTree t;
+    SkipList t;
     t.insert("k", "v");
     t.remove("k");
     EXPECT_EQ(t.get("k"), NOT_FOUND_VALUE);
 }
 
-TEST(RedBlackTree, ReinsertAfterRemoveReturnsNewValue)
+TEST(SkipList, ReinsertAfterRemoveReturnsNewValue)
 {
-    RedBlackTree t;
+    SkipList t;
     t.insert("k", "v1");
     t.remove("k");
     t.insert("k", "v2");
     EXPECT_EQ(t.get("k"), "v2");
 }
 
-TEST(RedBlackTree, RemoveNonExistentTombstoneStillNil)
+TEST(SkipList, RemoveNonExistentTombstoneStillNil)
 {
-    RedBlackTree t;
+    SkipList t;
     t.remove("ghost");
     EXPECT_EQ(t.get("ghost"), NOT_FOUND_VALUE);
 }
 
-TEST(RedBlackTree, MultipleKeysAllRetrievable)
+TEST(SkipList, MultipleKeysAllRetrievable)
 {
-    RedBlackTree t;
+    SkipList t;
     t.insert("a", "1");
     t.insert("b", "2");
     t.insert("c", "3");
@@ -86,9 +86,9 @@ TEST(RedBlackTree, MultipleKeysAllRetrievable)
     EXPECT_EQ(t.get("d"), "4");
 }
 
-TEST(RedBlackTree, LargeInsertAscending)
+TEST(SkipList, LargeInsertAscending)
 {
-    RedBlackTree t;
+    SkipList t;
     const int N = 500;
     for (int i = 0; i < N; ++i)
     {
@@ -100,9 +100,9 @@ TEST(RedBlackTree, LargeInsertAscending)
     }
 }
 
-TEST(RedBlackTree, LargeInsertDescending)
+TEST(SkipList, LargeInsertDescending)
 {
-    RedBlackTree t;
+    SkipList t;
     const int N = 500;
     for (int i = N - 1; i >= 0; --i)
     {
@@ -114,9 +114,9 @@ TEST(RedBlackTree, LargeInsertDescending)
     }
 }
 
-TEST(RedBlackTree, LargeInsertRandom)
+TEST(SkipList, LargeInsertRandom)
 {
-    RedBlackTree t;
+    SkipList t;
     const int N = 500;
     std::vector<int> keys(N);
     for (int i = 0; i < N; ++i)
@@ -134,9 +134,9 @@ TEST(RedBlackTree, LargeInsertRandom)
     }
 }
 
-TEST(RedBlackTree, MixedInsertRemoveOverwriteWorkload)
+TEST(SkipList, MixedInsertRemoveOverwriteWorkload)
 {
-    RedBlackTree t;
+    SkipList t;
     t.insert("a", "1");
     t.insert("b", "2");
     t.insert("c", "3");

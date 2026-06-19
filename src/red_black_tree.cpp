@@ -10,8 +10,8 @@ void RedBlackTree::_insert(std::string key, std::string value, bool tombstone)
     }
 
     // Insertion at the end
-    Node *current = root;
-    Node *prev = NIL::instance();
+    TreeNode *current = root;
+    TreeNode *prev = NIL::instance();
     while (current != NIL::instance())
     {
         prev = current;
@@ -30,7 +30,7 @@ void RedBlackTree::_insert(std::string key, std::string value, bool tombstone)
             return;
         }
     }
-    Node *new_node = create_new_node(key, value, tombstone);
+    TreeNode *new_node = create_new_node(key, value, tombstone);
     new_node->parent = prev;
     if (prev->key > key)
     {
@@ -43,9 +43,9 @@ void RedBlackTree::_insert(std::string key, std::string value, bool tombstone)
     rebalance(new_node);
 }
 
-Node *RedBlackTree::rotate_helper(Node *node)
+TreeNode *RedBlackTree::rotate_helper(TreeNode *node)
 {
-    Node *father = node->parent;
+    TreeNode *father = node->parent;
     if (father != root)
     {
         if (is_left_child(father))
@@ -64,16 +64,16 @@ Node *RedBlackTree::rotate_helper(Node *node)
     return father;
 }
 
-void RedBlackTree::rotate_left(Node *node)
+void RedBlackTree::rotate_left(TreeNode *node)
 {
     if (node == NIL::instance() || node == root)
     {
         return;
     }
-    Node *father = rotate_helper(node);
+    TreeNode *father = rotate_helper(node);
     node->parent = father->parent;
 
-    Node *left = node->left;
+    TreeNode *left = node->left;
     node->left = father;
     father->parent = node;
 
@@ -82,16 +82,16 @@ void RedBlackTree::rotate_left(Node *node)
         left->parent = father;
 }
 
-void RedBlackTree::rotate_right(Node *node)
+void RedBlackTree::rotate_right(TreeNode *node)
 {
     if (node == NIL::instance() || node == root)
     {
         return;
     }
-    Node *father = rotate_helper(node);
+    TreeNode *father = rotate_helper(node);
     node->parent = father->parent;
 
-    Node *right = node->right;
+    TreeNode *right = node->right;
     node->right = father;
     father->parent = node;
 
@@ -100,14 +100,14 @@ void RedBlackTree::rotate_right(Node *node)
         right->parent = father;
 }
 
-void RedBlackTree::rebalance(Node *node)
+void RedBlackTree::rebalance(TreeNode *node)
 {
     while (node != root && node->parent->color == Colors::RED)
     {
-        Node *father = node->parent;
-        Node *grand = father->parent;
+        TreeNode *father = node->parent;
+        TreeNode *grand = father->parent;
         bool father_is_left = is_left_child(father);
-        Node *uncle = father_is_left ? grand->right : grand->left;
+        TreeNode *uncle = father_is_left ? grand->right : grand->left;
 
         if (uncle->color == Colors::RED)
         {
@@ -122,7 +122,7 @@ void RedBlackTree::rebalance(Node *node)
             // Case 2: zig-zag -> straighten into line
             if (is_left_child(node) != father_is_left)
             {
-                Node *old_father = father;
+                TreeNode *old_father = father;
                 father_is_left ? rotate_left(node) : rotate_right(node);
                 node = old_father;
                 father = node->parent;
@@ -143,12 +143,12 @@ void RedBlackTree::insert(std::string key, std::string value)
 
 void RedBlackTree::remove(std::string key)
 {
-    _insert(key, NIL_VALUE, true);
+    _insert(key, NOT_FOUND_VALUE, true);
 }
 
 std::string RedBlackTree::get(std::string key)
 {
-    Node *current = root;
+    TreeNode *current = root;
 
     while (current != NIL::instance() && current->key != key)
     {
@@ -157,13 +157,13 @@ std::string RedBlackTree::get(std::string key)
 
     if (current->tombstone)
     {
-        return NIL_VALUE;
+        return NOT_FOUND_VALUE;
     }
 
     return current->value;
 }
 
-Node *create_new_node(std::string key, std::string value, bool tombstone)
+TreeNode *create_new_node(std::string key, std::string value, bool tombstone)
 {
-    return new Node{key, value, tombstone, Colors::RED, NIL::instance(), NIL::instance(), NIL::instance()};
+    return new TreeNode{key, value, tombstone, Colors::RED, NIL::instance(), NIL::instance(), NIL::instance()};
 };
