@@ -11,25 +11,25 @@ enum Colors
     RED
 };
 
-struct Node
+struct TreeNode
 {
     std::string key;
     std::string value;
     bool tombstone;
     Colors color;
-    Node *left;
-    Node *right;
-    Node *parent;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode *parent;
 };
 
 class NIL
 {
 public:
-    static Node *instance()
+    static TreeNode *instance()
     {
-        static Node *nil = []
+        static TreeNode *nil = []
         {
-            Node *n = new Node{NIL_KEY, NIL_VALUE, Colors::BLACK};
+            TreeNode *n = new TreeNode{NIL_KEY, NIL_VALUE, false, Colors::BLACK, nullptr, nullptr, nullptr};
             n->left = n->right = n->parent = n;
             return n;
         }();
@@ -39,7 +39,7 @@ public:
 
 class RedBlackTree
 {
-    Node *root = NIL::instance();
+    TreeNode *root = NIL::instance();
 
 public:
     void insert(std::string key, std::string value);
@@ -48,12 +48,12 @@ public:
 
 private:
     void _insert(std::string key, std::string value, bool tombstone = false);
-    void rebalance(Node *node);
-    Node *rotate_helper(Node *node);
-    void rotate_left(Node *node);
-    void rotate_right(Node *node);
+    void rebalance(TreeNode *node);
+    TreeNode *rotate_helper(TreeNode *node);
+    void rotate_left(TreeNode *node);
+    void rotate_right(TreeNode *node);
 
-    bool is_left_child(Node *node)
+    bool is_left_child(TreeNode *node)
     {
         if (node == root)
         {
@@ -62,7 +62,7 @@ private:
         return node == node->parent->left;
     }
 
-    void destroy(Node *node)
+    void destroy(TreeNode *node)
     {
         if (node == NIL::instance())
             return;
@@ -72,4 +72,4 @@ private:
     }
 };
 
-Node *create_new_node(std::string key, std::string value, bool tombstone = false);
+TreeNode *create_new_node(std::string key, std::string value, bool tombstone = false);
