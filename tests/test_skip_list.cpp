@@ -1,0 +1,153 @@
+#include <gtest/gtest.h>
+
+#include <algorithm>
+#include <iomanip>
+#include <random>
+#include <sstream>
+#include <string>
+#include <vector>
+
+#include "skip_list.hpp"
+
+namespace
+{
+    std::string pad(int i)
+    {
+        std::ostringstream oss;
+        oss << std::setw(4) << std::setfill('0') << i;
+        return oss.str();
+    }
+}
+
+TEST(SkipList, InsertSingleKey)
+{
+    SkipList t;
+    t.insert("k", "v");
+    EXPECT_EQ(t.get("k"), "v");
+}
+
+TEST(SkipList, OverwriteExisting)
+{
+    SkipList t;
+    t.insert("k", "v1");
+    t.insert("k", "v2");
+    EXPECT_EQ(t.get("k"), "v2");
+}
+
+TEST(SkipList, GetMissingFromEmptyList)
+{
+    SkipList t;
+    EXPECT_EQ(t.get("nope"), NOT_FOUND_VALUE);
+}
+
+TEST(SkipList, GetMissingFromNonEmptyList)
+{
+    SkipList t;
+    t.insert("a", "1");
+    t.insert("b", "2");
+    t.insert("c", "3");
+    EXPECT_EQ(t.get("z"), NOT_FOUND_VALUE);
+}
+
+TEST(SkipList, RemoveExistingReturnsNil)
+{
+    SkipList t;
+    t.insert("k", "v");
+    t.remove("k");
+    EXPECT_EQ(t.get("k"), NOT_FOUND_VALUE);
+}
+
+TEST(SkipList, ReinsertAfterRemoveReturnsNewValue)
+{
+    SkipList t;
+    t.insert("k", "v1");
+    t.remove("k");
+    t.insert("k", "v2");
+    EXPECT_EQ(t.get("k"), "v2");
+}
+
+TEST(SkipList, RemoveNonExistentTombstoneStillNil)
+{
+    SkipList t;
+    t.remove("ghost");
+    EXPECT_EQ(t.get("ghost"), NOT_FOUND_VALUE);
+}
+
+TEST(SkipList, MultipleKeysAllRetrievable)
+{
+    SkipList t;
+    t.insert("a", "1");
+    t.insert("b", "2");
+    t.insert("c", "3");
+    t.insert("d", "4");
+    EXPECT_EQ(t.get("a"), "1");
+    EXPECT_EQ(t.get("b"), "2");
+    EXPECT_EQ(t.get("c"), "3");
+    EXPECT_EQ(t.get("d"), "4");
+}
+
+TEST(SkipList, LargeInsertAscending)
+{
+    SkipList t;
+    const int N = 500;
+    for (int i = 0; i < N; ++i)
+    {
+        t.insert(pad(i), "v" + pad(i));
+    }
+    for (int i = 0; i < N; ++i)
+    {
+        EXPECT_EQ(t.get(pad(i)), "v" + pad(i));
+    }
+}
+
+TEST(SkipList, LargeInsertDescending)
+{
+    SkipList t;
+    const int N = 500;
+    for (int i = N - 1; i >= 0; --i)
+    {
+        t.insert(pad(i), "v" + pad(i));
+    }
+    for (int i = 0; i < N; ++i)
+    {
+        EXPECT_EQ(t.get(pad(i)), "v" + pad(i));
+    }
+}
+
+TEST(SkipList, LargeInsertRandom)
+{
+    SkipList t;
+    const int N = 500;
+    std::vector<int> keys(N);
+    for (int i = 0; i < N; ++i)
+        keys[i] = i;
+    std::mt19937 rng(42);
+    std::shuffle(keys.begin(), keys.end(), rng);
+
+    for (int k : keys)
+    {
+        t.insert(pad(k), "v" + pad(k));
+    }
+    for (int i = 0; i < N; ++i)
+    {
+        EXPECT_EQ(t.get(pad(i)), "v" + pad(i));
+    }
+}
+
+TEST(SkipList, MixedInsertRemoveOverwriteWorkload)
+{
+    SkipList t;
+    t.insert("a", "1");
+    t.insert("b", "2");
+    t.insert("c", "3");
+    t.remove("b");
+    t.insert("a", "1new");
+    t.insert("d", "4");
+    t.remove("e");
+
+    EXPECT_EQ(t.get("a"), "1new");
+    EXPECT_EQ(t.get("b"), NOT_FOUND_VALUE);
+    EXPECT_EQ(t.get("c"), "3");
+    EXPECT_EQ(t.get("d"), "4");
+    EXPECT_EQ(t.get("e"), NOT_FOUND_VALUE);
+}
