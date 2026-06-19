@@ -2,6 +2,9 @@
 
 #include <string>
 
+static std::string NIL_KEY = "<---NIL--->";
+static std::string NIL_VALUE = "<---NIL--->";
+
 enum Colors
 {
     BLACK,
@@ -26,7 +29,7 @@ public:
     {
         static Node *nil = []
         {
-            Node *n = new Node{"", "", Colors::BLACK};
+            Node *n = new Node{NIL_KEY, NIL_VALUE, Colors::BLACK};
             n->left = n->right = n->parent = n;
             return n;
         }();
@@ -41,6 +44,7 @@ class RedBlackTree
 public:
     void insert(std::string key, std::string value);
     void remove(std::string key);
+    std::string get(std::string key);
 
 private:
     void _insert(std::string key, std::string value, bool tombstone = false);
@@ -68,7 +72,4 @@ private:
     }
 };
 
-Node *create_new_node(std::string key, std::string value, bool tombstone = false)
-{
-    return new Node{key, value, tombstone, Colors::RED, NIL::instance(), NIL::instance(), NIL::instance()};
-};
+Node *create_new_node(std::string key, std::string value, bool tombstone = false);

@@ -145,3 +145,20 @@ void RedBlackTree::remove(std::string key)
 {
     _insert(key, "", true);
 }
+
+std::string RedBlackTree::get(std::string key)
+{
+    Node *current = root;
+
+    while (current != NIL::instance() && current->key != key)
+    {
+        current = current->key > key ? current->left : current->right;
+    }
+
+    return current->value;
+}
+
+Node *create_new_node(std::string key, std::string value, bool tombstone)
+{
+    return new Node{key, value, tombstone, Colors::RED, NIL::instance(), NIL::instance(), NIL::instance()};
+};
