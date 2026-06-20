@@ -1,6 +1,6 @@
 #pragma once
 
-#include "memtable.hpp"
+#include "memtable/memtable.hpp"
 
 template <Memtable M>
 class Database {

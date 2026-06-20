@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-#include "red_black_tree.hpp"
+#include "memtable/red_black_tree.hpp"
 
 namespace
 {

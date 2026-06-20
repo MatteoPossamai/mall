@@ -14,6 +14,9 @@ add_executable(run_tests
     test_skip_list.cpp
 )
 
+target_include_directories(rbtree PUBLIC ${CMAKE_SOURCE_DIR}/src)
+target_include_directories(skiplist PUBLIC ${CMAKE_SOURCE_DIR}/src)
+
 target_link_libraries(run_tests PRIVATE
     rbtree
     skiplist

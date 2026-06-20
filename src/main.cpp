@@ -1,5 +1,5 @@
-#include "database.hpp"
-#include "skip_list.hpp" // brings in the concrete SkipList type
+#include "db/database.hpp"
+#include "memtable/skip_list.hpp"
 
 int main()
 {
