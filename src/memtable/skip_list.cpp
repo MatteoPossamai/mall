@@ -34,7 +34,7 @@ void SkipList::_insert(std::string key, std::string value, bool remove)
 {
     ListNode *current = levels[SKIP_LIST_SIZE - 1];
     ListNode *prev[SKIP_LIST_SIZE];
-    int no_levels = generator->generate_level();
+    int no_levels = generator.generate_level();
 
     for (int i = SKIP_LIST_SIZE - 1; i >= 0; i--)
     {

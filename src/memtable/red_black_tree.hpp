@@ -4,7 +4,7 @@
 
 #include <string>
 
-static std::string NIL_KEY = "<---NIL--->";
+inline const std::string NIL_KEY = "<---NIL--->";
 
 enum Colors
 {
@@ -43,6 +43,7 @@ class RedBlackTree
     TreeNode *root = NIL::instance();
 
 public:
+    ~RedBlackTree(){destroy(root);};
     void insert(std::string key, std::string value);
     void remove(std::string key);
     std::string get(std::string key);

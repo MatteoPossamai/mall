@@ -53,7 +53,7 @@ public:
 class SkipList
 {
     ListNode *levels[SKIP_LIST_SIZE];
-    RandomGenerator *generator;
+    RandomGenerator generator;
 
 public:
     SkipList()
@@ -65,9 +65,17 @@ public:
             levels[i]->down = levels[i - 1];
             levels[i - 1]->up = levels[i];
         }
-        generator = new RandomGenerator();
     }
-
+    ~SkipList(){
+        for (int i = 0; i < SKIP_LIST_SIZE; i++) {
+            ListNode* node = levels[i];
+            while (node != nullptr) {
+                ListNode* next = node->right;
+                delete node;
+                node = next;
+            }
+        }
+    }
     void insert(std::string key, std::string value);
     void remove(std::string key);
     std::string get(std::string key);
