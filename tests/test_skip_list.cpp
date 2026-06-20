@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-#include "skip_list.hpp"
+#include "memtable/skip_list.hpp"
 
 namespace
 {

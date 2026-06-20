@@ -1,13 +1,8 @@
-add_library(rbtree STATIC
-    red_black_tree.cpp
-)
+add_subdirectory(memtable)
+add_subdirectory(db)
 
-add_library(skiplist STATIC
-    skip_list.cpp
-)
+add_executable(main_test main.cpp)
+target_link_libraries(main_test PRIVATE rbtree skiplist)
 
-target_include_directories(rbtree PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_include_directories(skiplist PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-
-target_compile_options(rbtree PRIVATE -Wall -Wextra -Wpedantic)
-target_compile_options(skiplist PRIVATE -Wall -Wextra -Wpedantic)
+target_include_directories(main_test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_compile_options(main_test PRIVATE -Wall -Wextra -Wpedantic)
